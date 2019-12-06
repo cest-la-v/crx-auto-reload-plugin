@@ -1,0 +1,16 @@
+# IDE
+.vscode
+.idea
+
+# dependencies
+node_modules
+
+# logs
+npm-debug.log
+yarn.lock
+
+# Webpack build
+build
+
+# Project exclude paths
+/build/
