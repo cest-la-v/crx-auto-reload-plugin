@@ -1,0 +1,50 @@
+{
+  "name": "crx-auto-reload-plugin",
+  "version": "1.0.4",
+  "private": false,
+  "description": "Watch for changes and auto reload the chrome extension at dev mode",
+  "main": "build/index.js",
+  "types": "typings/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/MightyVincent/crx-auto-reload-plugin.git"
+  },
+  "scripts": {
+    "prod": "webpack",
+    "dev": "webpack --watch",
+    "client": "webpack --color --config client/webpack.config.js"
+  },
+  "author": "Vincent Lee <ancienlee@qq.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MightyVincent/crx-auto-reload-plugin/issues"
+  },
+  "homepage": "https://github.com/MightyVincent/crx-auto-reload-plugin",
+  "keywords": [
+    "webpack",
+    "plugin",
+    "chrome",
+    "extension",
+    "crx",
+    "hot-reload",
+    "auto-reload"
+  ],
+  "dependencies": {
+    "chalk": "^3.0.0",
+    "webpack-sources": "^1.4.3"
+  },
+  "devDependencies": {
+    "@types/chalk": "^2.2.0",
+    "@types/chrome": "^0.0.91",
+    "@types/node": "^12.12.14",
+    "@types/webpack": "^4.41.0",
+    "@vue/eslint-config-standard": "^5.0.1",
+    "@vue/eslint-config-typescript": "^5.0.1",
+    "eslint": "^6.7.2",
+    "raw-loader": "^4.0.0",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.2",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
+  }
+}
