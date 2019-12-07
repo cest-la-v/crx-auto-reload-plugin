@@ -59,7 +59,7 @@ export default class CrxAutoReloadPlugin implements Plugin {
           throw new Error(`'manifest.background.page'('${pagePath}') asset not found!`)
         }
         compilation.assets[assetPath] = new ConcatSource(compilation.assets[assetPath],
-          '<script type="text/javascript" src="auto-reload.js"></script>')
+          '<script type="text/javascript" src="/auto-reload.js"></script>')
         logger.info(`'manifest.background.page'('${pagePath}') asset found and extended.`)
 
       } else {
