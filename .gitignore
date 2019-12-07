@@ -11,6 +11,6 @@ yarn.lock
 
 # Webpack build
 build
+yarn-error.log
 
 # Project exclude paths
-/build/
