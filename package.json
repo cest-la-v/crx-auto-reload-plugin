@@ -1,6 +1,6 @@
 {
   "name": "crx-auto-reload-plugin",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": false,
   "description": "Watch for changes and auto reload the chrome extension in dev mode.",
   "main": "build/index.js",
