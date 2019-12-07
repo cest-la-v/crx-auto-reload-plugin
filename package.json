@@ -1,8 +1,8 @@
 {
   "name": "crx-auto-reload-plugin",
-  "version": "1.0.4",
+  "version": "1.0.1",
   "private": false,
-  "description": "Watch for changes and auto reload the chrome extension at dev mode",
+  "description": "Watch for changes and auto reload the chrome extension in dev mode.",
   "main": "build/index.js",
   "types": "typings/index.d.ts",
   "repository": {
@@ -14,20 +14,17 @@
     "dev": "webpack --watch",
     "client": "webpack --color --config client/webpack.config.js"
   },
-  "author": "Vincent Lee <ancienlee@qq.com>",
+  "author": "Vincent Lee <ancienlee@live.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/MightyVincent/crx-auto-reload-plugin/issues"
   },
   "homepage": "https://github.com/MightyVincent/crx-auto-reload-plugin",
   "keywords": [
-    "webpack",
-    "plugin",
-    "chrome",
-    "extension",
     "crx",
-    "hot-reload",
-    "auto-reload"
+    "webpack-plugin",
+    "chrome-extension",
+      "auto-reload"
   ],
   "dependencies": {
     "chalk": "^3.0.0",
