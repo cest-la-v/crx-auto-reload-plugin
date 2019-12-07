@@ -1,9 +1,9 @@
 import webpack, {Plugin} from "webpack";
-import path from 'path';
+import {ConcatSource} from "webpack-sources";
+import * as path from 'path';
 import {existsSync, readFileSync} from 'fs';
 import logger from './logger'
 import AutoReloadSource from "raw-loader!./auto-reload.js"
-import {ConcatSource} from "webpack-sources";
 import Compilation = webpack.compilation.Compilation;
 
 export default class CrxAutoReloadPlugin implements Plugin {
@@ -24,14 +24,18 @@ export default class CrxAutoReloadPlugin implements Plugin {
       return;
     }
     this.enabled = true
-    logger.info("[CrxAutoReloadPlugin]: crx auto reload enabled.")
+    logger.info("crx auto reload enabled.")
   }
 
   compile(compilationParams) {
+    if (!this.enabled) {
+      return;
+    }
     if (!existsSync(this.manifestPath)) {
       throw new Error('manifest file not found!')
     }
     this.manifest = JSON.parse(readFileSync(this.manifestPath, 'utf8'))
+    logger.info("manifest file parsed.")
   }
 
   emit(compilation: Compilation, done) {
@@ -39,17 +43,24 @@ export default class CrxAutoReloadPlugin implements Plugin {
       if (!this.manifest.background) {
         this.manifest.background = {}
       }
+      let assetPathMap = {}
+      for (let assetPath in compilation.assets) {
+        if (compilation.assets.hasOwnProperty(assetPath)) {
+          assetPathMap[path.normalize(assetPath)] = assetPath
+        }
+      }
 
       let pagePath = this.manifest.background.page
       if (pagePath) {
         // background.page
         pagePath = path.normalize(pagePath);
-        let assetPath = Object.keys(compilation.assets).find(assetPath => path.normalize(assetPath) === pagePath)
+        let assetPath = assetPathMap[pagePath]
         if (!assetPath) {
-          throw new Error(`background page '${pagePath}' is not found`)
+          throw new Error(`'manifest.background.page'('${pagePath}') asset not found!`)
         }
         compilation.assets[assetPath] = new ConcatSource(compilation.assets[assetPath],
           '<script type="text/javascript" src="auto-reload.js"></script>')
+        logger.info(`'manifest.background.page'('${pagePath}') asset found and extended.`)
 
       } else {
         // background.scripts
@@ -57,6 +68,7 @@ export default class CrxAutoReloadPlugin implements Plugin {
           this.manifest.background.scripts = []
         }
         this.manifest.background.scripts.push('auto-reload.js')
+        logger.info('manifest.background.scripts extended.')
       }
 
       // auto-reload.js
@@ -64,6 +76,7 @@ export default class CrxAutoReloadPlugin implements Plugin {
         source: () => AutoReloadSource,
         size: () => AutoReloadSource.length
       }
+      logger.info('\'auto-reload.js\' asset added.')
     }
 
     // manifest.json
@@ -73,6 +86,8 @@ export default class CrxAutoReloadPlugin implements Plugin {
       source: () => manifestSource,
       size: () => manifestSource.length
     }
+    logger.info('\'manifest.json\' asset added.')
+
     return done()
   }
 

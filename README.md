@@ -2,6 +2,7 @@
 
 ## Feature
 
+- Watch for 'manifest.json's changes and generate the file.
 - Auto reload the chrome extension on changes while developing.
 - No pollution to the output while building for production.
 
