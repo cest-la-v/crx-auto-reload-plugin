@@ -12,7 +12,7 @@
 
 ### 服务端 'webpack --watch'
 
-- 解析并修改'manifest.json'文件
+- 解析并修改'manifest.json'文件的输出
     - 如果存在'background.page': 'background.page'所指的HTML尾部附加一段'&lt;script type=&quot;text/javascript&quot; src=&quot;auto-reload.js&quot;&gt;&lt;/script&gt;'
     - 否则: 在'background.scripts'中添加'auto-reload.js'
 - 添加一个 'auto-reload.js' 输出
