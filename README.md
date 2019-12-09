@@ -12,10 +12,10 @@ This is a webpack plugin, thus webpack is required.
 
 ### server side with 'webpack --watch' mode
 
-- Parse and modify the 'manifest.json' file
+- Parse and modify the 'manifest.json' file's output
     - if exists 'background.page': append a '&lt;script type=&quot;text/javascript&quot; src=&quot;auto-reload.js&quot;&gt;&lt;/script&gt;' at the end of 'background.page' HTML
     - else: add a 'auto-reload.js' to the 'background.scripts'
-- Add a 'auto-reload.js' asset
+- Add a 'auto-reload.js' asset output
 
 ### client side
 
