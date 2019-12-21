@@ -39,7 +39,7 @@ module.exports = {
 
 如果你需要一个用于开发Chrome插件的开箱即用的vue-cli项目生成配置，可以看看这里：
 
-- [MightyVincent/vue-cli-preset-crx - 一个用于开发Chrome插件的vue-cli项目生成配置](https://github.com/MightyVincent/vue-cli-preset-crx)
+- [MightyVincent/vue-cli-preset-crx - 一个用于开发Chrome插件的vue-cli项目初始化配置](https://github.com/MightyVincent/vue-cli-preset-crx)
 - [MightyVincent/tidy-tabs - 一个用本Webpack插件开发的Chrome插件](https://github.com/MightyVincent/tidy-tabs)
 
 ## Options
