@@ -1,29 +1,10 @@
-# Chrome Extension Auto Reload Plugin
+# Chrome Extension Auto Reload Webpack Plugin
 
 ## Feature
 
-- Watch for 'manifest.json's changes and generate the file.
 - Auto reload the chrome extension on changes while developing.
-- No pollution to the output while building for production.
-
-## How it works
-
-This is a webpack plugin, thus webpack is required.
-
-### server side with 'webpack --watch' mode
-
-- Parse and modify the 'manifest.json' file's output
-    - if exists 'background.page': append a '&lt;script type=&quot;text/javascript&quot; src=&quot;auto-reload.js&quot;&gt;&lt;/script&gt;' at the end of 'background.page' HTML
-    - else: add a 'auto-reload.js' to the 'background.scripts'
-- Add a 'auto-reload.js' asset output
-
-### client side
-
-With the server side, we will definitely modify and generate 'manifest.json' every time webpack builds, thus we only need to watch this one single file and reload extension while it changed.
-
-- Cache the current 'manifest.json' file's 'lastModified' on load
-- Every 2 seconds, compare the cached 'lastModified' with the newest 'lastModified'(as 'thisModified')
-- Reload extension if 'lastModified' < 'thisModified'
+- Auto open up popup/options page in tab after plugin load/reload.
+- No pollution to the output while building for production, only works with '--watch'.
 
 ## Installation
 
@@ -35,24 +16,52 @@ yarn add crx-auto-reload-plugin --dev
 
 ## Usage
 
-Import and use the plugin at the plugins section of your webpack configuration file.
+Import and use the plugin in your webpack configuration file.
 
-For example:
+For example, in project created by `vue-cli 3+`:
 
 ```js
-const path = require('path');
+// vue.config.js
 const CrxAutoReloadPlugin  = require('crx-auto-reload-plugin');
 
 module.exports = {
 //...
-    plugins: [
-      new CrxAutoReloadPlugin({
-        manifestPath: path.join(__dirname, '..', 'src', 'manifest.json') // required
-      })
-    ]
+  configureWebpack: config => {
+    // ...
+    config.plugins.push(
+      new CrxAutoReloadPlugin(),
+    )
+    // ...
+ }
 //...
 }
 ```
+
+Check these out, if you want a out-of-box vue-cli preset for chrome extension develop:
+
+- [MightyVincent/vue-cli-preset-crx - A vue-cli project preset for chrome extension](https://github.com/MightyVincent/vue-cli-preset-crx)
+- [MightyVincent/tidy-tabs - A chrome extension developed with this plugin](https://github.com/MightyVincent/tidy-tabs)
+
+## Options
+
+```json5
+{
+    interval: 2000, // watch interval
+    openPopup: true, // should open popup page after plugin load/reload
+    openOptions: false, // should open options page after plugin load/reload
+}
+```
+
+## How it works
+
+### server side with 'webpack --watch' mode
+
+- Parse and modify the 'manifest.json' asset if exists to inject auto reload script.
+- Always generate a 'auto-reload.js' asset in every build, for watching changes.
+
+### client side
+
+- Watch for 'auto-reload.json' file's 'lastModified' change and auto call chrome.runtime.reload().
 
 ## Inspired By
 

@@ -1,29 +1,10 @@
-# Chrome插件自动重载
+# Chrome插件自动重载Webpack插件
 
 ## 特性
 
-- 监视'manifest.json'文件的修改并输出该文件
-- 开发时检测到代码修改的时候自动重新加载插件
-- 生产打包时不污染输出
-
-## 实现原理
-
-必需webpack
-
-### 服务端 'webpack --watch'
-
-- 解析并修改'manifest.json'文件的输出
-    - 如果存在'background.page': 'background.page'所指的HTML尾部附加一段'&lt;script type=&quot;text/javascript&quot; src=&quot;auto-reload.js&quot;&gt;&lt;/script&gt;'
-    - 否则: 在'background.scripts'中添加'auto-reload.js'
-- 添加一个 'auto-reload.js' 输出
-
-### 客户端
-
-有了服务端的功能，webpack每次构建时必然会修改并生成'manifest.json'，所以只需监视该文件的修改即刻
-
-- 加载时缓存当前'manifest.json'的'lastModified'属性
-- 每两秒比对一次缓存的'lastModified'和最新的'lastModified'
-- 如果不同则重载插件
+- 开发时检测到文件修改则自动重新加载插件
+- 加载时或重载时自动以标签页打开popup/options页面
+- 仅当'--watch'时开启，生产打包时自动关闭，不污染输出
 
 ## 安装
 
@@ -35,24 +16,52 @@ yarn add crx-auto-reload-plugin --dev
 
 ## 使用
 
-webpack配置文件中添加如下一段
+Import and use the plugin in your webpack configuration file.
 
-例如:
+For example, in project created by `vue-cli 3+`:
 
 ```js
-const path = require('path');
+// vue.config.js
 const CrxAutoReloadPlugin  = require('crx-auto-reload-plugin');
 
 module.exports = {
 //...
-    plugins: [
-      new CrxAutoReloadPlugin({
-        manifestPath: path.join(__dirname, '..', 'src', 'manifest.json') // required
-      })
-    ]
+  configureWebpack: config => {
+    // ...
+    config.plugins.push(
+      new CrxAutoReloadPlugin(),
+    )
+    // ...
+ }
 //...
 }
 ```
+
+如果你需要一个用于开发Chrome插件的开箱即用的vue-cli项目生成配置，可以看看这里：
+
+- [MightyVincent/vue-cli-preset-crx - 一个用于开发Chrome插件的vue-cli项目生成配置](https://github.com/MightyVincent/vue-cli-preset-crx)
+- [MightyVincent/tidy-tabs - 一个用本Webpack插件开发的Chrome插件](https://github.com/MightyVincent/tidy-tabs)
+
+## Options
+
+```json5
+{
+    interval: 2000, // watch interval
+    openPopup: true, // should open popup page after plugin load/reload
+    openOptions: false, // should open options page after plugin load/reload
+}
+```
+
+## How it works
+
+### 服务器端'webpack --watch'模式下
+
+- 检测到manifest.json输出时，如有必要则自动解析并修改该文件以注入自动重载脚本。
+- 每次构建始终生成auto-reload.js文件。
+
+### 浏览器端
+
+- 检测到auto-reload.json文件的修改时间变化则自动调用chrome.runtime.reload().
 
 ## 参考
 

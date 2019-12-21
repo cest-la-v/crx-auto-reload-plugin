@@ -2,9 +2,9 @@
   "name": "crx-auto-reload-plugin",
   "version": "1.0.4",
   "private": false,
-  "description": "Watch for changes and auto reload the chrome extension in dev mode.",
+  "description": "Watch for changes and auto reload the chrome extension while developing.",
   "main": "build/index.js",
-  "types": "typings/index.d.ts",
+  "types": "types/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git://github.com/MightyVincent/crx-auto-reload-plugin.git"
