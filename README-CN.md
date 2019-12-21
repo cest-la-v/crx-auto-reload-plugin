@@ -1,8 +1,8 @@
-# Chrome插件自动重载Webpack插件
+# Chrome扩展自动重载Webpack插件
 
 ## 特性
 
-- 开发时检测到文件修改则自动重新加载插件
+- 开发时检测到文件修改则自动重新加载扩展
 - 加载时或重载时自动以标签页打开popup/options页面
 - 仅当'--watch'时开启，生产打包时自动关闭，不污染输出
 
@@ -37,10 +37,10 @@ module.exports = {
 }
 ```
 
-如果你需要一个用于开发Chrome插件的开箱即用的vue-cli项目生成配置，可以看看这里：
+如果你需要一个用于开发Chrome扩展的开箱即用的vue-cli项目生成配置，可以看看这里：
 
-- [MightyVincent/vue-cli-preset-crx - 一个用于开发Chrome插件的vue-cli项目初始化配置](https://github.com/MightyVincent/vue-cli-preset-crx)
-- [MightyVincent/tidy-tabs - 一个用本Webpack插件开发的Chrome插件](https://github.com/MightyVincent/tidy-tabs)
+- [MightyVincent/vue-cli-preset-crx - 一个用于开发Chrome扩展的vue-cli项目初始化配置](https://github.com/MightyVincent/vue-cli-preset-crx)
+- [MightyVincent/tidy-tabs - 一个用本Webpack插件开发的Chrome扩展](https://github.com/MightyVincent/tidy-tabs)
 
 ## Options
 

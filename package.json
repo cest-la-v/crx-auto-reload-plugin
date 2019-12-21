@@ -2,7 +2,7 @@
   "name": "crx-auto-reload-plugin",
   "version": "1.0.4",
   "private": false,
-  "description": "Watch for changes and auto reload the chrome extension while developing.",
+  "description": "A webpack plugin to auto reload while developing chrome extension. 一个用于开发Chrome扩展时监视文件修改并自动重载的Webpack插件。",
   "main": "build/index.js",
   "types": "types/index.d.ts",
   "repository": {
