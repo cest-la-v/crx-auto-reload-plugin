@@ -8,9 +8,9 @@ node_modules
 # logs
 npm-debug.log
 yarn.lock
+yarn-error.log
 
 # Webpack build
 build
-yarn-error.log
 
 # Project exclude paths
