@@ -1,27 +1,59 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-    "strict": true,
+    /* Basic Options */
+    "target": "ES6",
+    "module": "CommonJS",
     "jsx": "preserve",
     "importHelpers": true,
-    "moduleResolution": "node",
     "experimentalDecorators": true,
-    "esModuleInterop": true,
+//    "sourceMap": true,
+    /* Allow javascript files to be compiled. */
+    //    "allowJs": true,
+    /* Report errors in .js files. */
+    //    "checkJs": true,
+    /* Do not emit outputs. */
+    //    "noEmit": true,
+    /* Strict Type-Checking Options */
+    /* Enable all strict type-checking options. */
+    "strict": true,
+    /* Raise error on expressions and declarations with an implied 'any' type. */
+    "noImplicitAny": false,
+    // "strictNullChecks": true,              /* Enable strict null checks. */
+    // "strictFunctionTypes": true,           /* Enable strict checking of function types. */
+    // "strictPropertyInitialization": true,  /* Enable strict checking of property initialization in classes. */
+    // "noImplicitThis": true,                /* Raise error on 'this' expressions with an implied 'any' type. */
+    // "alwaysStrict": true,                  /* Parse in strict mode and emit "use strict" for each source file. */
+
+    /* Additional Checks */
+    // "noUnusedLocals": true,                /* Report errors on unused locals. */
+    // "noUnusedParameters": true,            /* Report errors on unused parameters. */
+    // "noImplicitReturns": true,             /* Report error when not all code paths in function return a value. */
+    // "noFallthroughCasesInSwitch": true,    /* Report errors for fallthrough cases in switch statement. */
+
+    /* Module Resolution Options */
+    /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
+    "moduleResolution": "node",
+    /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */
     "allowSyntheticDefaultImports": true,
-    "sourceMap": true,
-    "baseUrl": ".",
+    /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    /* 加载的声明文件包 */
     "types": [
+      "chrome",
       "ejs",
-      "webpack",
-      "node",
-      "chrome"
+      "node"
     ],
+    /* 解析非相对模块的基地址，默认是当前目录 */
+    "baseUrl": ".",
+    /* 路径映射，相对于baseUrl */
     "paths": {
       "@/*": [
         "src/*"
       ]
     },
+    /* TS需要引用的库 */
     "lib": [
       "esnext",
       "dom",
@@ -38,6 +70,10 @@
     "tests/**/*.tsx"
   ],
   "exclude": [
-    "node_modules"
+    "coverage",
+    "dist",
+    "examples",
+    "node_modules",
+    "spec"
   ]
 }

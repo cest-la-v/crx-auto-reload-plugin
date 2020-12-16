@@ -1,5 +1,6 @@
-const chalk = require('chalk');
-let prefix: string = '[CrxAutoReloadPlugin]: '
+import chalk from "chalk";
+
+const prefix = '[CrxAutoReloadPlugin]: '
 
 export default {
   log: (message?: string, ...optionalParams: any[]) => console.log(prefix + message, ...optionalParams),
