@@ -8,12 +8,12 @@
   let lastModified = 0;
 
   // create tabs
-  let manifest = chrome.runtime.getManifest()
-  let defaultPopup = manifest.browser_action?.default_popup;
+  const manifest = chrome.runtime.getManifest()
+  const defaultPopup = manifest.browser_action?.default_popup;
   if (openPopup && defaultPopup) {
     chrome.tabs.create({url: chrome.runtime.getURL(defaultPopup)})
   }
-  let optionsPage = manifest.options_page;
+  const optionsPage = manifest.options_page;
   if (openOptions && optionsPage) {
     chrome.tabs.create({url: chrome.runtime.getURL(optionsPage)})
   }

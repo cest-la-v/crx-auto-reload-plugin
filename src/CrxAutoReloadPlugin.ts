@@ -1,17 +1,17 @@
-import webpack, {Compiler, Plugin} from 'webpack';
-import {ConcatSource} from 'webpack-sources';
+import {Compilation, Compiler, sources} from 'webpack';
 import AutoReloadRaw from 'raw-loader!./auto-reload'
 import ejs from 'ejs';
-import * as path from "path";
-import Compilation = webpack.compilation.Compilation;
+import path from 'path';
+import ConcatSource = sources.ConcatSource;
+import RawSource = sources.RawSource;
 import Manifest = chrome.runtime.Manifest;
 
-const normalize = (p: string): string => path.normalize(p).replace(/\\/g, '/')
+const _normalize = (p: string): string => path.normalize(p).replace(/\\/g, '/')
 
-export default class CrxAutoReloadPlugin implements Plugin {
+export default class CrxAutoReloadPlugin {
   private readonly isOpenTabs: boolean;
   private readonly AutoReloadSource: string;
-  private enabled: boolean = false;
+  private enabled = false;
   private backgroundPagePath: string | undefined;
 
   constructor({
@@ -35,18 +35,18 @@ export default class CrxAutoReloadPlugin implements Plugin {
     this.enabled = true
   }
 
-  emit(compilation: Compilation, done: Function): any {
+  emit({assets, outputOptions}: Compilation, done: (...args) => void): void {
     if (!this.enabled) {
       return done();
     }
 
-    let assetKeyMap: Map<string, string> = new Map(Object.keys(compilation.assets).map(key => [normalize(key), key]))
+    const assetKeyMap: Map<string, string> = new Map(Object.keys(assets).map(key => [_normalize(key), key]))
 
     // manifest.json, emit only if exists
-    let manifestKey = assetKeyMap.get('manifest.json')
+    const manifestKey = assetKeyMap.get('manifest.json')
     if (manifestKey) {
       let dirty = false
-      let manifest: Manifest = JSON.parse(compilation.assets[manifestKey].source());
+      const manifest: chrome.runtime.Manifest = JSON.parse(assets[manifestKey].source().toString());
 
       // background
       if (this.hackBackground(manifest)) {
@@ -60,37 +60,31 @@ export default class CrxAutoReloadPlugin implements Plugin {
 
       if (dirty) {
         // emit
-        let manifestSource = JSON.stringify(manifest)
-        compilation.assets[manifestKey] = {
-          source: () => manifestSource,
-          size: () => manifestSource.length
-        }
+        const manifestSource = JSON.stringify(manifest)
+        assets[manifestKey] = new RawSource(manifestSource)
       }
     }
 
     // background.page
     if (this.backgroundPagePath) {
-      let backgroundPageKey = assetKeyMap.get(this.backgroundPagePath)
+      const backgroundPageKey = assetKeyMap.get(this.backgroundPagePath)
       if (backgroundPageKey) {
         let autoReloadJsPath: string;
-        let publicPath = compilation.outputOptions.publicPath;
-        if (path.isAbsolute(publicPath)) {
+        const publicPath = outputOptions.publicPath;
+        if (typeof publicPath == 'string' && path.isAbsolute(publicPath)) {
           autoReloadJsPath = publicPath + (publicPath.endsWith('/') ? '' : '/') + 'auto-reload.js'
         } else {
-          autoReloadJsPath = normalize(path.relative(path.dirname(backgroundPageKey), 'auto-reload.js'));
+          autoReloadJsPath = _normalize(path.relative(path.dirname(backgroundPageKey), 'auto-reload.js'));
         }
-        compilation.assets[backgroundPageKey] = new ConcatSource(
-          compilation.assets[backgroundPageKey],
+        assets[backgroundPageKey] = new ConcatSource(
+          assets[backgroundPageKey],
           `<script type="text/javascript" src="${autoReloadJsPath}"></script>`
         )
       }
     }
 
     // auto-reload.js, emit always so client can watch for compile
-    compilation.assets['auto-reload.js'] = {
-      source: () => this.AutoReloadSource,
-      size: () => this.AutoReloadSource.length
-    }
+    assets['auto-reload.js'] = new RawSource(this.AutoReloadSource)
 
     return done()
   }
@@ -106,13 +100,13 @@ export default class CrxAutoReloadPlugin implements Plugin {
         .map((row: string) => {
           row.trim().split(' ')
         })
-      let cspMap: Map<string, Set<string>> = new Map()
+      const cspMap: Map<string, Set<string>> = new Map()
       manifest.content_security_policy.split(';')
         .filter((line: string) => line.trim())
         .forEach((line: string) => {
-          let row: string[] = line.split(' ')
+          const row: string[] = line.split(' ')
             .filter(value => value.trim());
-          let first = row.shift()
+          const first = row.shift()
           if (first) {
             cspMap.set(first, new Set(row))
           }
@@ -138,7 +132,7 @@ export default class CrxAutoReloadPlugin implements Plugin {
       }
 
       if (dirty) {
-        let lines: string[] = []
+        const lines: string[] = []
         cspMap.forEach((value, key) => {
           lines.push([key, ...value].join(' '))
         })
@@ -171,7 +165,7 @@ export default class CrxAutoReloadPlugin implements Plugin {
 
     if (manifest.background.page) {
       // background.page
-      this.backgroundPagePath = normalize(manifest.background.page)
+      this.backgroundPagePath = _normalize(manifest.background.page)
     } else {
       // background.scripts
       this.backgroundPagePath = undefined

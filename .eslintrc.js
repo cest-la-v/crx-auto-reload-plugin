@@ -4,16 +4,18 @@ module.exports = {
   env: {
     node: true,
   },
-  'extends': [
-    '@vue/standard',
-    '@vue/typescript',
+  parser: '@typescript-eslint/parser',
+  plugins: [
+    '@typescript-eslint',
+  ],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
   ],
   rules: {
     'no-console': isProd ? 'error' : 'off',
     'no-debugger': isProd ? 'error' : 'off',
     'comma-dangle': isProd ? 'error' : 'off',
-  },
-  parserOptions: {
-    parser: '@typescript-eslint/parser'
+    '@typescript-eslint/ban-ts-comment': 'off'
   },
 }
