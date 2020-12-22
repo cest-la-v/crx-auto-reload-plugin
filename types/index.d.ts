@@ -1,12 +1,20 @@
-declare type Options = {
-  interval: number
-  openPopup: boolean
-  openOptions: boolean
-}
-
 declare module "raw-loader*" {
   const content: string;
   export = content;
+}
+
+declare namespace limc92 {
+  import {Plugin} from 'webpack';
+
+  declare class CrxAutoReloadPlugin implements Plugin {
+    constructor(options: CrxAutoReloadPluginOptions);
+  }
+
+  declare type CrxAutoReloadPluginOptions = {
+    interval: number
+    openPopup: boolean
+    openOptions: boolean
+  }
 }
 
 /*

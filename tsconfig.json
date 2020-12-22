@@ -43,7 +43,8 @@
     "types": [
       "chrome",
       "ejs",
-      "node"
+      "node",
+      "webpack"
     ],
     /* 解析非相对模块的基地址，默认是当前目录 */
     "baseUrl": ".",
@@ -60,14 +61,12 @@
       "dom.iterable"
     ]
   },
-  "files": [
-    "types/index.d.ts"
-  ],
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
     "tests/**/*.ts",
-    "tests/**/*.tsx"
+    "tests/**/*.tsx",
+    "types/*"
   ],
   "exclude": [
     "coverage",
