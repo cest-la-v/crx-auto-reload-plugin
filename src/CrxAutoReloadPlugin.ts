@@ -1,14 +1,15 @@
-import {Compilation, Compiler, sources} from 'webpack';
+import {compilation, Compiler, Plugin} from 'webpack';
 import AutoReloadRaw from 'raw-loader!./auto-reload'
 import ejs from 'ejs';
 import path from 'path';
-import ConcatSource = sources.ConcatSource;
-import RawSource = sources.RawSource;
+import {ConcatSource, RawSource} from 'webpack-sources'
+import Compilation = compilation.Compilation;
 import Manifest = chrome.runtime.Manifest;
+import CrxAutoReloadPluginOptions = limc92.CrxAutoReloadPluginOptions;
 
 const _normalize = (p: string): string => path.normalize(p).replace(/\\/g, '/')
 
-export default class CrxAutoReloadPlugin {
+export default class CrxAutoReloadPlugin implements Plugin {
   private readonly isOpenTabs: boolean;
   private readonly AutoReloadSource: string;
   private enabled = false;
@@ -18,7 +19,7 @@ export default class CrxAutoReloadPlugin {
                 interval = 2000,
                 openPopup = true,
                 openOptions = false,
-              }: Options = {interval: 2000, openPopup: true, openOptions: false}) {
+              }: CrxAutoReloadPluginOptions) {
     this.isOpenTabs = openPopup || openOptions;
     this.AutoReloadSource = ejs.render(AutoReloadRaw, {interval, openPopup, openOptions})
   }
