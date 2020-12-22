@@ -1,13 +1,13 @@
 {
   "name": "crx-auto-reload-plugin",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "private": false,
   "description": "A webpack plugin to auto reload while developing chrome extension. 一个用于开发Chrome扩展时监视文件修改并自动重载的Webpack插件。",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git://github.com/MightyVincent/crx-auto-reload-plugin.git"
+    "url": "git://github.com/limc92/crx-auto-reload-plugin.git"
   },
   "scripts": {
     "prod": "webpack",
@@ -17,9 +17,9 @@
   "author": "Vincent Lee <ancienlee@live.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/MightyVincent/crx-auto-reload-plugin/issues"
+    "url": "https://github.com/limc92/crx-auto-reload-plugin/issues"
   },
-  "homepage": "https://github.com/MightyVincent/crx-auto-reload-plugin",
+  "homepage": "https://github.com/limc92/crx-auto-reload-plugin",
   "keywords": [
     "crx",
     "webpack-plugin",
