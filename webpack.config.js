@@ -11,7 +11,7 @@ module.exports = {
     publicPath: '.',
     path: path.resolve(__dirname, './dist'),
     filename: 'index.js',
-    // libraryTarget: 'umd',
+    libraryTarget: 'umd',
   },
   resolve: {
     modules: [path.resolve(__dirname, 'src'), 'node_modules'],
