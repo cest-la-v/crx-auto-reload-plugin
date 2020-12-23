@@ -10,6 +10,6 @@ npm-debug.log
 yarn-error.log
 
 # Webpack build
-build
+dist
 
 # Project exclude paths
