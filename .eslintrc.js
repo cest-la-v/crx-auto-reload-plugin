@@ -4,10 +4,10 @@ module.exports = {
   env: {
     node: true,
   },
-  parser: '@typescript-eslint/parser',
-  plugins: [
-    '@typescript-eslint',
-  ],
+  parserOptions: {
+    parser: '@typescript-eslint/parser',
+    ecmaVersion: 2020
+  },
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',

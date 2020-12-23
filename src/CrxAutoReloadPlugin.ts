@@ -1,13 +1,13 @@
 import {compilation, Compiler, Plugin} from 'webpack';
+import {ConcatSource, RawSource} from 'webpack-sources'
 import AutoReloadRaw from 'raw-loader!./auto-reload'
 import ejs from 'ejs';
 import path from 'path';
-import {ConcatSource, RawSource} from 'webpack-sources'
 import Compilation = compilation.Compilation;
 import Manifest = chrome.runtime.Manifest;
 import CrxAutoReloadPluginOptions = limc92.CrxAutoReloadPluginOptions;
 
-const _normalize = (p: string): string => path.normalize(p).replace(/\\/g, '/')
+const normalize = (p: string): string => path.normalize(p).replace(/\\/g, '/')
 
 export default class CrxAutoReloadPlugin implements Plugin {
   private readonly isOpenTabs: boolean;
@@ -19,7 +19,7 @@ export default class CrxAutoReloadPlugin implements Plugin {
                 interval = 2000,
                 openPopup = true,
                 openOptions = false,
-              }: CrxAutoReloadPluginOptions) {
+              }: CrxAutoReloadPluginOptions = {interval: 2000, openPopup: true, openOptions: false}) {
     this.isOpenTabs = openPopup || openOptions;
     this.AutoReloadSource = ejs.render(AutoReloadRaw, {interval, openPopup, openOptions})
   }
@@ -36,18 +36,18 @@ export default class CrxAutoReloadPlugin implements Plugin {
     this.enabled = true
   }
 
-  emit({assets, outputOptions}: Compilation, done: (...args) => void): void {
+  emit({assets, outputOptions}: Compilation, done: () => void): void {
     if (!this.enabled) {
       return done();
     }
 
-    const assetKeyMap: Map<string, string> = new Map(Object.keys(assets).map(key => [_normalize(key), key]))
+    const assetKeyMap: Map<string, string> = new Map(Object.keys(assets).map(key => [normalize(key), key]))
 
     // manifest.json, emit only if exists
     const manifestKey = assetKeyMap.get('manifest.json')
     if (manifestKey) {
       let dirty = false
-      const manifest: chrome.runtime.Manifest = JSON.parse(assets[manifestKey].source().toString());
+      const manifest: Manifest = JSON.parse(assets[manifestKey].source().toString());
 
       // background
       if (this.hackBackground(manifest)) {
@@ -75,7 +75,7 @@ export default class CrxAutoReloadPlugin implements Plugin {
         if (typeof publicPath == 'string' && path.isAbsolute(publicPath)) {
           autoReloadJsPath = publicPath + (publicPath.endsWith('/') ? '' : '/') + 'auto-reload.js'
         } else {
-          autoReloadJsPath = _normalize(path.relative(path.dirname(backgroundPageKey), 'auto-reload.js'));
+          autoReloadJsPath = normalize(path.relative(path.dirname(backgroundPageKey), 'auto-reload.js'));
         }
         assets[backgroundPageKey] = new ConcatSource(
           assets[backgroundPageKey],
@@ -166,7 +166,7 @@ export default class CrxAutoReloadPlugin implements Plugin {
 
     if (manifest.background.page) {
       // background.page
-      this.backgroundPagePath = _normalize(manifest.background.page)
+      this.backgroundPagePath = normalize(manifest.background.page)
     } else {
       // background.scripts
       this.backgroundPagePath = undefined

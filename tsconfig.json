@@ -2,17 +2,17 @@
   "compilerOptions": {
     "target": "ES6",
     "module": "CommonJS",
+    "moduleResolution": "node",
     "jsx": "preserve",
     "importHelpers": true,
+    "esModuleInterop": true,
     "experimentalDecorators": true,
 //    "sourceMap": true,
+    "resolveJsonModule": true,
+    "strict": true,
     //    "allowJs": true,
     //    "checkJs": true,
-    "strict": true,
-    "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
     "skipLibCheck": true,
     /* 加载的声明文件包 */
     "types": [
@@ -44,10 +44,7 @@
     "types/*"
   ],
   "exclude": [
-    "coverage",
     "dist",
-    "examples",
     "node_modules",
-    "spec"
   ]
 }
