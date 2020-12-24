@@ -19,7 +19,7 @@
     "url": "https://github.com/limc92/crx-auto-reload-plugin/issues"
   },
   "scripts": {
-    "build": "webpack"
+    "build": "webpack --mode production"
   },
   "main": "dist/index.js",
   "types": "types/index.d.ts",
