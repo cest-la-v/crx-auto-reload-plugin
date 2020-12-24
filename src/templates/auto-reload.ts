@@ -1,5 +1,6 @@
 /* auto-reload start */
 (function (chrome) {
+
   const interval = parseInt('<%= interval %>');
   // @ts-ignore
   const openPopup = '<%= openPopup %>' === 'true';
@@ -7,19 +8,15 @@
   const openOptions = '<%= openOptions %>' === 'true';
   let lastModified = 0;
 
-  // create tabs
-  const manifest = chrome.runtime.getManifest()
-  const defaultPopup = manifest.browser_action?.default_popup;
-  if (openPopup && defaultPopup) {
-    chrome.tabs.create({url: chrome.runtime.getURL(defaultPopup)})
-  }
-  const optionsPage = manifest.options_page;
-  if (openOptions && optionsPage) {
-    chrome.tabs.create({url: chrome.runtime.getURL(optionsPage)})
+  function createTabIfNotExists(url: string) {
+    chrome.tabs.query({url: url}, function (result: chrome.tabs.Tab[]) {
+      if (result.length === 0) {
+        chrome.tabs.create({url: url})
+      }
+    })
   }
 
-  // watch for changes
-  async function readThisModified(): Promise<number> {
+  async function readBuildTimestamp(): Promise<number> {
     return new Promise((resolve) => {
       chrome.runtime.getPackageDirectoryEntry(rootDir => {
         rootDir.getFile('auto-reload.js', {}, function (fileEntry) {
@@ -32,7 +29,7 @@
   }
 
   function reloadIfRebuilt() {
-    readThisModified()
+    readBuildTimestamp()
       .then(thisModified => {
         if (lastModified === 0) {
           lastModified = thisModified
@@ -46,6 +43,18 @@
       });
   }
 
+  // create tabs
+  const manifest = chrome.runtime.getManifest()
+  const popupPage = manifest.browser_action?.default_popup;
+  if (openPopup && popupPage) {
+    createTabIfNotExists(chrome.runtime.getURL(popupPage))
+  }
+  const optionsPage = manifest.options_page;
+  if (openOptions && optionsPage) {
+    createTabIfNotExists(chrome.runtime.getURL(optionsPage))
+  }
+
+  // watch for changes
   reloadIfRebuilt();
 
 })(chrome);
