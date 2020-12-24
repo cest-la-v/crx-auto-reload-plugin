@@ -1,6 +1,6 @@
 import {compilation, Compiler, Plugin} from 'webpack';
 import {ConcatSource, RawSource} from 'webpack-sources'
-import AutoReloadRaw from 'raw-loader!./auto-reload'
+import AutoReloadRaw from 'raw-loader!./templates/auto-reload'
 import ejs from 'ejs';
 import path from 'path';
 import Compilation = compilation.Compilation;
@@ -46,20 +46,20 @@ export default class CrxAutoReloadPlugin implements Plugin {
     // manifest.json, emit only if exists
     const manifestKey = assetKeyMap.get('manifest.json')
     if (manifestKey) {
-      let dirty = false
+      let isManifestDirty = false
       const manifest: Manifest = JSON.parse(assets[manifestKey].source().toString());
 
       // background
       if (this.hackBackground(manifest)) {
-        dirty = true
+        isManifestDirty = true
       }
 
       // content_security_policy
       /*if (this.hackCSP(manifest)) {
-        dirty = true
+        isManifestDirty = true
       }*/
 
-      if (dirty) {
+      if (isManifestDirty) {
         // emit
         const manifestSource = JSON.stringify(manifest)
         assets[manifestKey] = new RawSource(manifestSource)
@@ -171,10 +171,12 @@ export default class CrxAutoReloadPlugin implements Plugin {
       // background.scripts
       this.backgroundPagePath = undefined
       if (!manifest.background.scripts) {
-        manifest.background.scripts = []
+        manifest.background.scripts = ['auto-reload.js']
+        dirty = true
+      } else if (!manifest.background.scripts.some(script => script.toLowerCase() === 'auto-reload.js')) {
+        manifest.background.scripts.push('auto-reload.js')
+        dirty = true
       }
-      manifest.background.scripts.push('auto-reload.js')
-      dirty = true
     }
     return dirty;
   }
