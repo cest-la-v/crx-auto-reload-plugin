@@ -1,6 +1,6 @@
 const path = require('path');
 const pack = require('./package.json');
-const rootDir = path.resolve(__dirname, '..')
+const rootDir = path.resolve(__dirname, '..');
 
 module.exports = {
   mode: 'none',
@@ -16,7 +16,7 @@ module.exports = {
   resolve: {
     modules: [path.resolve(__dirname, 'src'), 'node_modules'],
     mainFiles: ['index'],
-    extensions: ['.ts', '.tsx', '.js', '.json'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.ejs', '.ets', '.json'],
   },
   externals: {
     subtract: Object.keys(pack.dependencies),
@@ -24,15 +24,20 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(tsx?|js)$/,
+        test: /\.(e?tsx?|e?jsx?)$/,
         loader: 'eslint-loader',
         enforce: 'pre',
         include: path.join(rootDir, 'src'),
         exclude: /node_modules/,
       },
       {
-        test: /\.tsx?$/,
+        test: /\.e?tsx?$/,
         loader: 'ts-loader',
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.(e?tsx?|e?jsx?)$/,
+        type: 'asset/source',
         exclude: /node_modules/,
       },
     ],
