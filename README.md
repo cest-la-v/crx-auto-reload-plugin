@@ -1,5 +1,11 @@
 # Chrome Extension Auto Reload Webpack Plugin
 
+## !!!Deprecated!!!
+
+You don't need this anymore, nowadays, unpacked extensions loaded in developer mode use the files from filesystem directly, thus, unless you made a `manifest.json` change, you only need to reload the extension's page to get the newest changed files.
+
+Recommend using [quasar](https://quasar.dev/quasar-cli-vite/developing-browser-extensions/introduction#introduction) for extension development.
+
 ## Feature
 
 - Auto reload the chrome extension on changes while developing.
